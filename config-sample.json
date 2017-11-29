@@ -1,3 +1,14 @@
-{ "token"  : "MTg-this-IzNzU3OTA5NjA-is.not-DCeFB-a.real-r4DQlO-t0ken-qerT0",
-  "prefix" : "+"
+{
+  "crono": {
+    "token": "MTg-this-IzNzU3OTA5NjA-is.not-DCeFB-a.real-r4DQlO-t0ken-qerT0",
+    "prefix": "c+"
+  },
+  "marle": {
+    "token": "MTg-this-IzNzU3OTA5NjA-is.not-DCeFB-a.real-r4DQlO-t0ken-qerT0",
+    "prefix": "m+"
+  },
+  "lucca": {
+    "token": "MTg-this-IzNzU3OTA5NjA-is.not-DCeFB-a.real-r4DQlO-t0ken-qerT0",
+    "prefix": "l+"
+  }
 }
