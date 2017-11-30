@@ -6,7 +6,7 @@ const lucca = new Discord.Client();
 // Here we load the config.json file that contains our token and our prefix values. 
 const config = require("./config.json");
 // config.crono/marle/lucca.token contains the given bot's token
-// config.crono/marle/lucca.prefix contains the message prefix.
+// config.crono/marle/lucca.prefix contains the message prefix. -- OVERRIDE THIS WITH @MENTIONS!!
 
 // --
 
@@ -22,17 +22,26 @@ marle.on('message', async message => {
 	// and not get into a spam loop (we call that "botception").
 	if(message.author.bot) return;
 	
-	// Also good practice to ignore any message that does not start with our prefix, 
-	// which is set in the configuration file.
-	if (config.marle.prefix !== '@mention')
-	{
-		if(message.content.indexOf(config.marle.prefix) !== 0) return;
-	}
-	else
-	{
-		if (!message.isMentioned(marle.user)) return;
-	}
+	// Also good practice to ignore any message that does not mention the bot.
+	if (!message.isMentioned(marle.user)) return;
+	
+	// Here we separate our "command" name, and our "arguments" for the command. 
+	// e.g. if we have the message "+say Is this the real life?" , we'll get the following:
+	// command = say
+	// args = ["Is", "this", "the", "real", "life?"]
+	const prefix = `<@${marle.user.id}>`;
+	const args = message.content.slice(prefix.length).trim().split(/ +/g);
+	const command = args.shift().toLowerCase();
 
+	// Let's go with a few common example commands! Feel free to delete or change those.
+
+	if(command === "ping") {
+	// Calculates ping between sending a message and editing it, giving a nice round-trip latency.
+	// The second ping is an average latency between the bot and the websocket server (one-way, not round-trip)
+	const m = await message.channel.send("Ping?");
+	m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(marle.ping)}ms`);
+	}
+	
 });
 
 marle.login(config.marle.token);
@@ -49,6 +58,7 @@ lucca.on('ready', () => {
 lucca.on('message', msg => {
 	if (msg.author != lucca.user && msg.isMentioned(lucca.user))
 	{
+		console.log(msg.content);
 		msg.reply('Yes?');
 	}
   if (msg.content === 'ping') {
