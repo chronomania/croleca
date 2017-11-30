@@ -11,16 +11,28 @@ const config = require("./config.json");
 // --
 
 marle.on('ready', () => {
-  // console.log(`Marle logged in as ${marle.user.tag}!`);
-  console.log(`Marle fugiu do castelo, está tretando com ${marle.users.size} usuários, em ${marle.channels.size} canais de ${marle.guilds.size} servidores\\guilds.`);
-  // Alterar Now Playing...
-  marle.user.setGame('saving the World!');
+	// console.log(`Marle logged in as ${marle.user.tag}!`);
+	console.log(`Marle fugiu do castelo, está tretando com ${marle.users.size} usuários, em ${marle.channels.size} canais de ${marle.guilds.size} servidores\\guilds.`);
+	// Alterar Now Playing...
+	marle.user.setGame('saving the World!');
 });
 
-marle.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('Pong!');
-  }
+marle.on('message', async message => {
+	// It's good practice to ignore other bots. This also makes your bot ignore itself
+	// and not get into a spam loop (we call that "botception").
+	if(message.author.bot) return;
+	
+	// Also good practice to ignore any message that does not start with our prefix, 
+	// which is set in the configuration file.
+	if (config.marle.prefix !== '@mention')
+	{
+		if(message.content.indexOf(config.marle.prefix) !== 0) return;
+	}
+	else
+	{
+		if (!message.isMentioned(marle.user)) return;
+	}
+
 });
 
 marle.login(config.marle.token);
@@ -35,6 +47,10 @@ lucca.on('ready', () => {
 });
 
 lucca.on('message', msg => {
+	if (msg.author != lucca.user && msg.isMentioned(lucca.user))
+	{
+		msg.reply('Yes?');
+	}
   if (msg.content === 'ping') {
     msg.reply('Pong!');
   }
@@ -54,8 +70,8 @@ crono.on('ready', () => {
 crono.on('message', msg => {
   if (msg.content === 'hei Crono') {
     //msg.reply('Pong!');
-	marle.sendMessage(msg.channel, "Ele não responde...");
-	lucca.sendMessage(msg.channel, "Só nós!");
+	marle.channels.get(msg.channel.id).send("Ele não responde...");
+	lucca.channels.get(msg.channel.id).send("Só nós...!");
   }
 });
 
